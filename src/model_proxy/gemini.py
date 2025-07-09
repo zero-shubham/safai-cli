@@ -63,15 +63,26 @@ class GeminiProxy:
     def __parse_suggested_dir_structure(self, content: str) -> dict:
         return safe_load(StringIO(content.replace("---", "")))
 
-    def get_suggestion(self, files: List[str]) -> dict:
-        self.content.append(
-            types.Content(
-                role="user",
-                parts=[
-                    types.Part.from_text(text=self.__generate_file_names_prompt(files))
-                ],
+    def get_suggestion(self, files: List[str], user_feeback: str = "") -> dict:
+        if len(self.content) == 0:
+            self.content.append(
+                types.Content(
+                    role="user",
+                    parts=[
+                        types.Part.from_text(
+                            text=self.__generate_file_names_prompt(files)
+                        )
+                    ],
+                )
             )
-        )
+        else:
+            self.content.append(
+                types.Content(
+                    role="user",
+                    parts=[types.Part.from_text(text=user_feeback)],
+                )
+            )
+
         response = self.client.models.generate_content(
             model=self.model,
             config=types.GenerateContentConfig(
@@ -79,6 +90,12 @@ class GeminiProxy:
                 temperature=0.3,
             ),
             contents=self.content,
+        )
+        self.content.append(
+            types.Content(
+                role="model",
+                parts=[types.Part.from_text(text=response.text)],
+            )
         )
 
         return self.__parse_suggested_dir_structure(response.text)

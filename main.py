@@ -2,6 +2,8 @@ import typer
 from typing_extensions import Annotated
 from src.config import PlatformEnum
 from src.pipeline import PipelineCreator
+from pathlib import Path
+from typing import List
 
 app = typer.Typer(
     name="Safai", help="CLI that cleans yup folder by intelligently organizing it."
@@ -10,7 +12,7 @@ app = typer.Typer(
 
 @app.command()
 def main(
-    path: str,
+    path: Path,
     platform: Annotated[
         PlatformEnum, typer.Option("--platform", "-pl", help="AI platform to use")
     ] = PlatformEnum.np,
@@ -25,6 +27,9 @@ def main(
         bool,
         typer.Option("--recursive", "-r", help="Recursively organize sub-directories"),
     ] = False,
+    ignore: Annotated[
+        List[str], typer.Option("--ignore", "-i", help="Directories to ignore")
+    ] = [],
 ):
     """
     CLI that cleans yup folder by intelligently organizing it.\n
@@ -42,6 +47,8 @@ def main(
     --recursive: Recursively organize sub-directories
 
     --model: Model to use as per platform
+
+    --ignore: Directories to ignore
     """
 
     pipeline = PipelineCreator.create(
@@ -52,6 +59,7 @@ def main(
             "one_shot": one_shot,
             "recursive": recursive,
             "model": model,
+            "ignore": ignore,
         }
     )
 

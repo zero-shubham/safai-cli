@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.config import Config
+from src.config import Config, PlatformEnum
 import typer
 from rich import print as pp
 from pydantic import ValidationError
@@ -20,39 +20,43 @@ class Pipeline:
         self.cfg = cfg
 
     def run(self):
-        pp(self.cfg)
-
-        dh = DirectoryHandler(self.cfg.path)
+        dh = DirectoryHandler(self.cfg.path, self.cfg.ignore)
         dir_files = dh.list_directory_files(recursive=True)
 
-        ai = ProxyCreator.create(self.cfg)
+        # ai = ProxyCreator.create(self.cfg)
 
-        for directory, files in dir_files.items():
-            pp(directory, files)
+        # for directory, files in dir_files.items():
+        #     suggestion = ai.get_suggestion(files)
+        #     dh.restructure_directory(directory, suggestion)
 
-            # suggestion = ai.get_suggestion(files)
-
-            # pp(suggestion)
+        pp("complete.")
 
 
 class PipelineCreator:
     @classmethod
-    def __load_config_file__(cls) -> dict:
+    def __load_config_file__(cls, platform: PlatformEnum) -> dict:
         home = Path.home()
         cfg_parser = ConfigParser()
         cfg_parser.read(f"{home}/.safai")
         cfg = {}
 
-        for section in cfg_parser.sections():
-            cfg.update(cfg_parser[section])
+        cfg.update(cfg_parser["config"])
+        if platform == PlatformEnum.np:
+            platform = cfg.get("platform")
+
+        print(cfg_parser.has_section(platform), cfg_parser)
+        if cfg_parser.has_section(platform):
+            cfg.update(cfg_parser[platform])
+            print(cfg_parser[platform], cfg)
 
         return cfg
 
     @classmethod
     def create(cls, config: dict) -> Orchestrator:
         try:
-            config.update(cls.__load_config_file__())
-            pp(config)
+            config.update(
+                cls.__load_config_file__(config.get("platform", PlatformEnum.np))
+            )
             cfg = Config(**config)
 
             return Pipeline(cfg)

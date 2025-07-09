@@ -1,6 +1,8 @@
 from pydantic import BaseModel, field_validator, constr, ValidationInfo
 from enum import Enum
 from rich import print as pp
+from pathlib import Path
+from typing import List
 
 
 class PlatformEnum(str, Enum):
@@ -14,12 +16,13 @@ _default_models = {PlatformEnum.gemini: "gemini-1.5-flash"}
 
 
 class Config(BaseModel):
-    path: constr(strip_whitespace=True, min_length=1)
+    path: Path
     platform: PlatformEnum
     api_key: constr(strip_whitespace=True, min_length=8)
     one_shot: bool
     recursive: bool
     model: str
+    ignore: List[str]
 
     @field_validator("platform")
     def valid_plaform(cls, v: PlatformEnum):
