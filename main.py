@@ -21,7 +21,12 @@ def main(
     platform: Annotated[
         PlatformEnum, typer.Option("--platform", "-pl", help="AI platform to use")
     ] = PlatformEnum.np,
-    one_shot: Annotated[bool, typer.Option("--one_shot", "-o")] = False,
+    one_shot: Annotated[
+        bool,
+        typer.Option(
+            "--one_shot", "-o", help="Organize without any feedback from user"
+        ),
+    ] = False,
     api_key: Annotated[
         str, typer.Option("--api_key", "-a", help="API Key for AI Model")
     ] = "",

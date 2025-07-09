@@ -33,19 +33,21 @@ class Pipeline:
                 ai = ProxyCreator.create(self.cfg)
                 suggestion = ai.get_suggestion(files)
 
+                feedback = "n"
                 while not self.cfg.one_shot:
                     status.stop()
                     feedback = Console(record=True).input(
-                        "Please provide any feedback if required (n to accept current plan): "
+                        "Please provide any feedback if required (n to accept / s to skip - current plan): "
                     )
 
-                    if feedback == "n":
+                    if feedback == "n" or feedback == "s":
                         break
 
                     status.start()
                     suggestion = ai.get_suggestion(files, feedback)
 
-                dh.restructure_directory(directory, suggestion)
+                if feedback != "s":
+                    dh.restructure_directory(directory, suggestion)
 
         pp("Happy decluttering! :sparkles:")
 
@@ -70,9 +72,13 @@ class PipelineCreator:
     @classmethod
     def create(cls, config: dict) -> Orchestrator:
         try:
-            config.update(
-                cls._load_config_file_(config.get("platform", PlatformEnum.np))
+            config_from_file = cls._load_config_file_(
+                config.get("platform", PlatformEnum.np)
             )
+            for k, v in config.items():
+                if not v and k not in ["one_shot", "recursive"]:
+                    config[k] = config_from_file.get(k, "")
+
             cfg = Config(**config)
 
             return Pipeline(cfg)
