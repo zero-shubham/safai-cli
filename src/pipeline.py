@@ -21,20 +21,22 @@ class Pipeline:
 
     def run(self):
         dh = DirectoryHandler(self.cfg.path, self.cfg.ignore)
-        dir_files = dh.list_directory_files(recursive=True)
+        dir_files = dh.list_directory_files(recursive=self.cfg.recursive)
 
-        # ai = ProxyCreator.create(self.cfg)
-
-        # for directory, files in dir_files.items():
-        #     suggestion = ai.get_suggestion(files)
-        #     dh.restructure_directory(directory, suggestion)
+        for directory, files in dir_files.items():
+            ai = ProxyCreator.create(self.cfg)
+            if len(files) == 0:
+                pp(f"Skipping empty folder {directory}")
+                continue
+            suggestion = ai.get_suggestion(files)
+            dh.restructure_directory(directory, suggestion)
 
         pp("complete.")
 
 
 class PipelineCreator:
     @classmethod
-    def __load_config_file__(cls, platform: PlatformEnum) -> dict:
+    def _load_config_file_(cls, platform: PlatformEnum) -> dict:
         home = Path.home()
         cfg_parser = ConfigParser()
         cfg_parser.read(f"{home}/.safai")
@@ -44,10 +46,8 @@ class PipelineCreator:
         if platform == PlatformEnum.np:
             platform = cfg.get("platform")
 
-        print(cfg_parser.has_section(platform), cfg_parser)
         if cfg_parser.has_section(platform):
             cfg.update(cfg_parser[platform])
-            print(cfg_parser[platform], cfg)
 
         return cfg
 
@@ -55,7 +55,7 @@ class PipelineCreator:
     def create(cls, config: dict) -> Orchestrator:
         try:
             config.update(
-                cls.__load_config_file__(config.get("platform", PlatformEnum.np))
+                cls._load_config_file_(config.get("platform", PlatformEnum.np))
             )
             cfg = Config(**config)
 

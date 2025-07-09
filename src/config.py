@@ -12,7 +12,11 @@ class PlatformEnum(str, Enum):
     np = "not provided"
 
 
-_default_models = {PlatformEnum.gemini: "gemini-1.5-flash"}
+_default_models = {
+    PlatformEnum.gemini: "gemini-1.5-flash",
+    PlatformEnum.openai: "o4-mini",
+    PlatformEnum.claude: "claude-3-7-sonnet-latest",
+}
 
 
 class Config(BaseModel):
