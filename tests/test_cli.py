@@ -49,38 +49,47 @@ def test_organize_sample_folder(mocker, platform):
             "MeetingMinutes.docx",
             "ResearchPaper.pdf",
             "ProjectPlan.xlsx",
-            "PresentationDraft.pptx"
+            "PresentationDraft.pptx",
         ],
         "Media": {
-            "Images": [
-                "VacationPhoto.jpg",
-                "CompanyLogo.png"
-            ],
+            "Images": ["VacationPhoto.jpg", "CompanyLogo.png"],
             "Audio": ["LectureRecording.mp3"],
-            "Video": ["ProductDemo.mp4"]
+            "Video": ["ProductDemo.mp4"],
         },
-        "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"]
+        "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"],
     }
     if platform == "openai":
         mocker.patch("src.model_proxy.openai.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.openai.OpenaiProxy.get_suggestion", return_value=mock_ret_val)
+            "src.model_proxy.openai.OpenaiProxy.get_suggestion",
+            return_value=mock_ret_val,
+        )
     elif platform == "gemini":
         mocker.patch("src.model_proxy.gemini.genai.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.gemini.GeminiProxy.get_suggestion", return_value=mock_ret_val)
+            "src.model_proxy.gemini.GeminiProxy.get_suggestion",
+            return_value=mock_ret_val,
+        )
     elif platform == "claude":
         mocker.patch("src.model_proxy.claude.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.claude.ClaudeProxy.get_suggestion", return_value=mock_ret_val)
+            "src.model_proxy.claude.ClaudeProxy.get_suggestion",
+            return_value=mock_ret_val,
+        )
 
-    result = runner.invoke(app, [
-        str(SAMPLE_DIR),
-        "--platform", platform,
-        "--api_key", "dummy-key",
-        "--model", "dummy-model",
-        "--one_shot"
-    ])
+    result = runner.invoke(
+        app,
+        [
+            str(SAMPLE_DIR),
+            "--platform",
+            platform,
+            "--api_key",
+            "dummy-key",
+            "--model",
+            "dummy-model",
+            "--one_shot",
+        ],
+    )
     if result.exit_code != 0:
         print("CLI output:\n", result.output)
     assert result.exit_code == 0
@@ -106,40 +115,42 @@ def test_organize_sample_folder(mocker, platform):
 
 def test_path_generator_debug():
     from src.directory_handler.handler import DirectoryHandler
+
     suggestions = {
         "Documents": [
             "MeetingMinutes.docx",
             "ResearchPaper.pdf",
             "ProjectPlan.xlsx",
-            "PresentationDraft.pptx"
+            "PresentationDraft.pptx",
         ],
         "Media": {
             "Images": [
                 "VacationPhoto.jpg",
                 "CompanyLogo.png",
                 "extra1.jpg",
-                "extra2.png"
+                "extra2.png",
             ],
             "Audio": ["LectureRecording.mp3"],
-            "Video": ["ProductDemo.mp4"]
+            "Video": ["ProductDemo.mp4"],
         },
-        "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"]
+        "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"],
     }
     dh = DirectoryHandler(Path("/tmp"), ignore=[])
     paths = list(dh._path_generator(suggestions))
     print("_path_generator output:", paths)
-    assert (["Documents"], [
-        "MeetingMinutes.docx",
-        "ResearchPaper.pdf",
-        "ProjectPlan.xlsx",
-        "PresentationDraft.pptx"
-    ]) in paths
-    assert (["Media", "Images"], [
-        "VacationPhoto.jpg",
-        "CompanyLogo.png",
-        "extra1.jpg",
-        "extra2.png"
-    ]) in paths
+    assert (
+        ["Documents"],
+        [
+            "MeetingMinutes.docx",
+            "ResearchPaper.pdf",
+            "ProjectPlan.xlsx",
+            "PresentationDraft.pptx",
+        ],
+    ) in paths
+    assert (
+        ["Media", "Images"],
+        ["VacationPhoto.jpg", "CompanyLogo.png", "extra1.jpg", "extra2.png"],
+    ) in paths
     assert (["Media", "Audio"], ["LectureRecording.mp3"]) in paths
     assert (["Media", "Video"], ["ProductDemo.mp4"]) in paths
     assert (["SystemFiles"], ["SoftwareUpdate.exe", "SystemBackup.iso"]) in paths
@@ -147,22 +158,26 @@ def test_path_generator_debug():
 
 def test_list_directory_files_recursive_nested():
     from src.directory_handler.handler import DirectoryHandler
+
     dh = DirectoryHandler(SAMPLE_DIR, ignore=[])
     result = dh.list_directory_files(recursive=True)
     print("list_directory_files(recursive=True) output:", result)
 
-    expected = [[
-        "ProductDemo.mp4",
-        "PresentationDraft.pptx",
-        "CompanyLogo.png",
-        "SystemBackup.iso",
-        "LectureRecording.mp3",
-        "ProjectPlan.xlsx",
-        "SoftwareUpdate.exe",
-        "ResearchPaper.pdf",
-        "MeetingMinutes.docx",
-        "VacationPhoto.jpg"
-    ], ["extra2.png", "extra1.jpg"]]
+    expected = [
+        [
+            "ProductDemo.mp4",
+            "PresentationDraft.pptx",
+            "CompanyLogo.png",
+            "SystemBackup.iso",
+            "LectureRecording.mp3",
+            "ProjectPlan.xlsx",
+            "SoftwareUpdate.exe",
+            "ResearchPaper.pdf",
+            "MeetingMinutes.docx",
+            "VacationPhoto.jpg",
+        ],
+        ["extra2.png", "extra1.jpg"],
+    ]
 
-    for _,v in result.items():
+    for _, v in result.items():
         assert v in expected

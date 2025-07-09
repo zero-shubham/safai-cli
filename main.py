@@ -10,7 +10,7 @@ sys.tracebacklimit = 0
 
 app = typer.Typer(
     name="Safai",
-    help="CLI that cleans yup folder by intelligently organizing it.",
+    help="CLI that cleans up folder by intelligently organizing it.",
     pretty_exceptions_enable=False,
 )
 

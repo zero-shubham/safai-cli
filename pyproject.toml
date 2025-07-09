@@ -1,21 +1,19 @@
 [project]
 name = "safai"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.3.0"
+authors = [
+  { name="Shubham Biswas", email="connect@xolve.dev" },
+]
+description = "CLI that cleans up folder by intelligently organizing it"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "anthropic>=0.57.1",
     "google-genai>=1.24.0",
     "openai>=1.93.2",
     "pydantic>=2.11.7",
-    "pytest>=8.4.1",
-    "pytest-asyncio>=1.0.0",
-    "pytest-cov>=6.2.1",
-    "pytest-mock>=3.14.1",
     "pyyaml>=6.0.2",
     "rich>=14.0.0",
-    "ruff>=0.12.2",
     "typer>=0.16.0",
 ]
 
@@ -28,6 +26,22 @@ dependencies = [
       "N", 
     ]
 
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "pytest-cov>=6.2.1",
+    "pytest-mock>=3.14.1",
+    "ruff>=0.12.2",
+    "setuptools>=80.9.0",
+    "twine>=6.1.0",
+]
+
+[tool.poetry.scripts]
+safai = "main:app"
+
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonryw.api"

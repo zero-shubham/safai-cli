@@ -31,7 +31,8 @@ class DirectoryHandler:
                 extracted_files = {
                     **extracted_files,
                     **self.list_directory_files(
-                        path=join(path, f), recursive=recursive)
+                        path=join(path, f), recursive=recursive
+                    ),
                 }
 
         return extracted_files
