@@ -11,7 +11,7 @@ help:
 	@echo "  make clean           - Clean up temporary files"
 
 install:
-	./.venv/bin/pip install -r requirements.txt
+	uv pip install --requirements requirements.txt
 
 export:
 	uv export --format requirements-txt > requirements.txt

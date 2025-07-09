@@ -39,9 +39,3 @@ dev = [
     "twine>=6.1.0",
 ]
 
-[tool.poetry.scripts]
-safai = "main:app"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonryw.api"
