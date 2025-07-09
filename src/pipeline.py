@@ -77,7 +77,8 @@ class PipelineCreator:
             )
             for k, v in config.items():
                 if not v and k not in ["one_shot", "recursive"]:
-                    config[k] = config_from_file.get(k, "")
+                    if config_from_file.get(k, ""):
+                        config[k] = config_from_file[k]
 
             cfg = Config(**config)
 
