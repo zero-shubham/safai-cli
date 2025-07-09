@@ -35,11 +35,10 @@ uv_export:
 	uv export --format requirements-txt > requirements.txt  
 
 test:
-	make uv_export && .venv/bin/pytest --disable-warnings -v tests/ --asyncio-mode=auto\
+	make uv_export && .venv/bin/pytest -s -v tests/ --asyncio-mode=auto\
 		--cov=src \
 		--cov-report term \
-		--cov-report term-missing \
-		--cov-report html
+		--cov-report term-missing
 
 fmt:
 	uv run ruff format

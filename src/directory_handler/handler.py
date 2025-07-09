@@ -21,36 +21,40 @@ class DirectoryHandler:
 
         dir_content = listdir(cur_path)
         extracted_files = {cur_path: []}
+
         for f in dir_content:
             if isfile(join(self.root_path, path, f)) or islink(
                 join(self.root_path, path, f)
             ):
                 extracted_files[cur_path].append(f)
             elif recursive:
-                extracted_files.update(
-                    self.list_directory_files(path=join(path, f), recursive=recursive)
-                )
+                extracted_files = {
+                    **extracted_files,
+                    **self.list_directory_files(
+                        path=join(path, f), recursive=recursive)
+                }
 
         return extracted_files
 
-    def _walk_and_return_path(self, dirs: Union[dict, list]) -> Tuple[List[str], list]:
+    def _walk_and_return_path(self, dirs: Union[dict, list]) -> Generator:
         if type(dirs) is list:
-            return [], dirs
+            yield [], dirs
+            return
 
         for k in dirs.keys():
-            path, val = self._walk_and_return_path(dirs[k])
-            ret = [k]
-            ret.extend(path)
-            return ret, val
+            for path, val in self._walk_and_return_path(dirs[k]):
+                ret = [k]
+                ret.extend(path)
+                yield ret, val
 
     def _path_generator(self, dirs: dict) -> Union[Generator, None]:
         if type(dirs) is not dict:
             return
         for k in dirs.keys():
-            path, files = self._walk_and_return_path(dirs[k])
-            ret_path = [k]
-            ret_path.extend(path)
-            yield ret_path, files
+            for path, files in self._walk_and_return_path(dirs[k]):
+                ret_path = [k]
+                ret_path.extend(path)
+                yield ret_path, files
 
     def restructure_directory(self, cur_path: str, suggestions: dict):
         for new_dir, files in self._path_generator(suggestions):
