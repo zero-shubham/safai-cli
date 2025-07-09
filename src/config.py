@@ -38,6 +38,8 @@ class Config(BaseModel):
     def valid_model(cls, v: str, values: ValidationInfo, **kwargs):
         if v == "":
             default = _default_models[values.data["platform"]]
-            pp(f"Model value not provided defaulting to {default}")
+            pp(
+                f"Model value not provided defaulting to [bold blue]{default}[/bold blue]"
+            )
             return default
         return v

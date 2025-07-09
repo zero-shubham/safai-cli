@@ -8,7 +8,7 @@ from src.model_proxy.claude import ClaudeProxy
 
 class AIProxy(ABC):
     @abstractmethod
-    def get_suggestion(self, files: List[str]) -> dict:
+    def get_suggestion(self, files: List[str], user_feeback: str = "") -> dict:
         pass
 
 

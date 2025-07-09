@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from src.config import Config, PlatformEnum
 import typer
 from rich import print as pp
+from rich.console import Console
 from pydantic import ValidationError
 from pathlib import Path
 from configparser import ConfigParser
@@ -23,15 +24,30 @@ class Pipeline:
         dh = DirectoryHandler(self.cfg.path, self.cfg.ignore)
         dir_files = dh.list_directory_files(recursive=self.cfg.recursive)
 
-        for directory, files in dir_files.items():
-            ai = ProxyCreator.create(self.cfg)
-            if len(files) == 0:
-                pp(f"Skipping empty folder {directory}")
-                continue
-            suggestion = ai.get_suggestion(files)
-            dh.restructure_directory(directory, suggestion)
+        with Console().status("[bold green]In process...\n") as status:
+            for directory, files in dir_files.items():
+                status.console.print(f"Currently processing {directory} \n")
+                if len(files) == 0:
+                    pp(f"Skipping empty folder {directory} :zero:")
+                    continue
+                ai = ProxyCreator.create(self.cfg)
+                suggestion = ai.get_suggestion(files)
 
-        pp("complete.")
+                while not self.cfg.one_shot:
+                    status.stop()
+                    feedback = Console(record=True).input(
+                        "Please provide any feedback if required (n to accept current plan): "
+                    )
+
+                    if feedback == "n":
+                        break
+
+                    status.start()
+                    suggestion = ai.get_suggestion(files, feedback)
+
+                dh.restructure_directory(directory, suggestion)
+
+        pp("Happy decluttering! :sparkles:")
 
 
 class PipelineCreator:
@@ -70,5 +86,5 @@ class PipelineCreator:
             pp(err_msg)
             raise typer.Exit()
         except Exception as e:
-            pp(f"Unexpected error: {e}")
+            pp(f"Unexpected error: {str(e)}")
             raise typer.Exit()

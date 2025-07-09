@@ -4,9 +4,14 @@ from src.config import PlatformEnum
 from src.pipeline import PipelineCreator
 from pathlib import Path
 from typing import List
+import sys
+
+sys.tracebacklimit = 0
 
 app = typer.Typer(
-    name="Safai", help="CLI that cleans yup folder by intelligently organizing it."
+    name="Safai",
+    help="CLI that cleans yup folder by intelligently organizing it.",
+    pretty_exceptions_enable=False,
 )
 
 
