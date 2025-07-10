@@ -1,12 +1,13 @@
 [project]
 name = "safai"
-version = "0.3.0"
+version = "0.4.0"
 authors = [
   { name="Shubham Biswas", email="connect@xolve.dev" },
 ]
 description = "CLI that cleans up folder by intelligently organizing it"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "GPL-3.0-or-later" }
 dependencies = [
     "anthropic>=0.57.1",
     "google-genai>=1.24.0",
@@ -38,4 +39,16 @@ dev = [
     "setuptools>=80.9.0",
     "twine>=6.1.0",
 ]
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+safai = "safai.main:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*", "dist"]
+namespaces = false 
 

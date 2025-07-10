@@ -1,7 +1,7 @@
 import typer
 from typing_extensions import Annotated
-from src.config import PlatformEnum
-from src.pipeline import PipelineCreator
+from src.safai.config import PlatformEnum
+from src.safai.pipeline import PipelineCreator
 from pathlib import Path
 from typing import List
 import sys

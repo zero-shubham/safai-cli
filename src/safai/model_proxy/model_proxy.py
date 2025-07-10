@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
-from src.config import Config, PlatformEnum
-from src.model_proxy.gemini import GeminiProxy
-from src.model_proxy.openai import OpenaiProxy
-from src.model_proxy.claude import ClaudeProxy
+from safai.config import Config, PlatformEnum
+from safai.model_proxy.gemini import GeminiProxy
+from safai.model_proxy.openai import OpenaiProxy
+from safai.model_proxy.claude import ClaudeProxy
 from yaml import safe_load
 from io import StringIO
 from rich import print as pp

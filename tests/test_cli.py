@@ -1,10 +1,8 @@
-import os
 import shutil
 from pathlib import Path
 import pytest
-import typer
 from typer.testing import CliRunner
-from main import app
+from src.safai.main import app
 from yaml import dump
 
 # Paths
@@ -63,21 +61,21 @@ def test_organize_sample_folder(mocker, platform):
     mock_ret_val = "---\n" + mock_ret_val + "--- \nSome explaination from LLM"
     
     if platform == "openai":
-        mocker.patch("src.model_proxy.openai.Client", autospec=True)
+        mocker.patch("src.safai.model_proxy.openai.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.openai.OpenaiProxy.get_suggestion",
+            "src.safai.model_proxy.openai.OpenaiProxy.get_suggestion",
             return_value=mock_ret_val,
         )
     elif platform == "gemini":
-        mocker.patch("src.model_proxy.gemini.genai.Client", autospec=True)
+        mocker.patch("src.safai.model_proxy.gemini.genai.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.gemini.GeminiProxy.get_suggestion",
+            "src.safai.model_proxy.gemini.GeminiProxy.get_suggestion",
             return_value=mock_ret_val,
         )
     elif platform == "claude":
-        mocker.patch("src.model_proxy.claude.Client", autospec=True)
+        mocker.patch("src.safai.model_proxy.claude.Client", autospec=True)
         mocker.patch(
-            "src.model_proxy.claude.ClaudeProxy.get_suggestion",
+            "src.safai.model_proxy.claude.ClaudeProxy.get_suggestion",
             return_value=mock_ret_val,
         )
 
@@ -118,7 +116,7 @@ def test_organize_sample_folder(mocker, platform):
 
 
 def test_path_generator_debug():
-    from src.directory_handler.handler import DirectoryHandler
+    from src.safai.directory_handler.handler import DirectoryHandler
 
     suggestions = {
         "Documents": [
@@ -161,7 +159,7 @@ def test_path_generator_debug():
 
 
 def test_list_directory_files_recursive_nested():
-    from src.directory_handler.handler import DirectoryHandler
+    from src.safai.directory_handler.handler import DirectoryHandler
 
     dh = DirectoryHandler(SAMPLE_DIR, ignore=[])
     result = dh.list_directory_files(recursive=True)

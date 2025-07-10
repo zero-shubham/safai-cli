@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
-from src.config import Config, PlatformEnum
+from .config import Config, PlatformEnum
 import typer
 from rich import print as pp
 from rich.console import Console
 from pydantic import ValidationError
 from pathlib import Path
 from configparser import ConfigParser
-from src.model_proxy import ProxyCreator
-from src.directory_handler import DirectoryHandler
+from .model_proxy import ProxyCreator
+from .directory_handler import DirectoryHandler
 
 
 class Orchestrator(ABC):

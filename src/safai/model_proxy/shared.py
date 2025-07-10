@@ -1,8 +1,3 @@
-from typing import Callable, List
-from yaml import safe_load
-from io import StringIO
-from rich import print as pp
-
 
 _system_prompt = """
 You are a smart assistant who helps in organizing folders. You are provided with a list of file names and you respond with how to organize these files.

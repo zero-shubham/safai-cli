@@ -120,4 +120,4 @@ model = claude-3-7-sonnet-latest
 - Make sure your API keys are valid and have access to the selected model/platform.
 
 ## License
-MIT
+GNU General Public License v3.0
