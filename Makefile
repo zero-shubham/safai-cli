@@ -17,7 +17,7 @@ export:
 	uv export --format requirements-txt > requirements.txt
 
 run:
-	./.venv/bin/python3 run.py $(ARGS)
+	./.venv/bin/python3 src/safai/main.py $(ARGS)
 
 build:
 	uv build
