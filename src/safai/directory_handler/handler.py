@@ -26,6 +26,8 @@ class DirectoryHandler:
             if isfile(join(self.root_path, path, f)) or islink(
                 join(self.root_path, path, f)
             ):
+                if " " in f:
+                    f = self._rename_whitespace(join(self.root_path, path), f)
                 extracted_files[cur_path].append(f)
             elif recursive:
                 extracted_files = {
@@ -36,6 +38,11 @@ class DirectoryHandler:
                 }
 
         return extracted_files
+
+    def _rename_whitespace(self, path: str, file: str) -> str:
+        without_space = file.replace(" ", "_")
+        rename(join(path, file), join(path, without_space))
+        return without_space
 
     def _walk_and_return_path(self, dirs: Union[dict, list]) -> Generator:
         if type(dirs) is list:

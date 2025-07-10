@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 import pytest
 from typer.testing import CliRunner
-from src.safai.main import app
+from safai.main import app
 from yaml import dump
 
 # Paths
@@ -23,6 +23,7 @@ def setup_and_teardown_sample_folder():
     (SAMPLE_DIR / "ResearchPaper.pdf").write_text("Paper")
     (SAMPLE_DIR / "ProjectPlan.xlsx").write_text("Plan")
     (SAMPLE_DIR / "PresentationDraft.pptx").write_text("Draft")
+    (SAMPLE_DIR / "Order 123.docx").write_text("Order")
     # Media
     (SAMPLE_DIR / "VacationPhoto.jpg").write_text("Photo")
     (SAMPLE_DIR / "CompanyLogo.png").write_text("Logo")
@@ -43,39 +44,45 @@ def setup_and_teardown_sample_folder():
 
 @pytest.mark.parametrize("platform", ["openai", "claude", "gemini"])
 def test_organize_sample_folder(mocker, platform):
-    mock_ret_val = dump({
-        "Documents": [
-            "MeetingMinutes.docx",
-            "ResearchPaper.pdf",
-            "ProjectPlan.xlsx",
-            "PresentationDraft.pptx",
-        ],
-        "Media": {
-            "Images": ["VacationPhoto.jpg", "CompanyLogo.png"],
-            "Audio": ["LectureRecording.mp3"],
-            "Video": ["ProductDemo.mp4"],
+    mock_ret_val = dump(
+        {
+            "Documents": [
+                "MeetingMinutes.docx",
+                "ResearchPaper.pdf",
+                "ProjectPlan.xlsx",
+                "Order_123.docx",
+                "PresentationDraft.pptx",
+            ],
+            "Media": {
+                "Images": ["VacationPhoto.jpg", "CompanyLogo.png"],
+                "Audio": ["LectureRecording.mp3"],
+                "Video": ["ProductDemo.mp4"],
+            },
+            "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"],
         },
-        "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"],
-    }, default_flow_style=False, sort_keys=False)
+        default_flow_style=False,
+        sort_keys=False,
+    )
+
     # test extra explanation added scenario
     mock_ret_val = "---\n" + mock_ret_val + "--- \nSome explaination from LLM"
-    
+
     if platform == "openai":
-        mocker.patch("src.safai.model_proxy.openai.Client", autospec=True)
+        mocker.patch("safai.model_proxy.openai.Client", autospec=True)
         mocker.patch(
-            "src.safai.model_proxy.openai.OpenaiProxy.get_suggestion",
+            "safai.model_proxy.openai.OpenaiProxy.get_suggestion",
             return_value=mock_ret_val,
         )
     elif platform == "gemini":
-        mocker.patch("src.safai.model_proxy.gemini.genai.Client", autospec=True)
+        mocker.patch("safai.model_proxy.gemini.genai.Client", autospec=True)
         mocker.patch(
-            "src.safai.model_proxy.gemini.GeminiProxy.get_suggestion",
+            "safai.model_proxy.gemini.GeminiProxy.get_suggestion",
             return_value=mock_ret_val,
         )
     elif platform == "claude":
-        mocker.patch("src.safai.model_proxy.claude.Client", autospec=True)
+        mocker.patch("safai.model_proxy.claude.Client", autospec=True)
         mocker.patch(
-            "src.safai.model_proxy.claude.ClaudeProxy.get_suggestion",
+            "safai.model_proxy.claude.ClaudeProxy.get_suggestion",
             return_value=mock_ret_val,
         )
 
@@ -106,6 +113,7 @@ def test_organize_sample_folder(mocker, platform):
     assert (docs / "MeetingMinutes.docx").exists()
     assert (docs / "ResearchPaper.pdf").exists()
     assert (docs / "ProjectPlan.xlsx").exists()
+    assert (docs / "Order_123.docx").exists()
     assert (docs / "PresentationDraft.pptx").exists()
     assert (images / "VacationPhoto.jpg").exists()
     assert (images / "CompanyLogo.png").exists()
@@ -116,7 +124,7 @@ def test_organize_sample_folder(mocker, platform):
 
 
 def test_path_generator_debug():
-    from src.safai.directory_handler.handler import DirectoryHandler
+    from safai.directory_handler.handler import DirectoryHandler
 
     suggestions = {
         "Documents": [
@@ -159,7 +167,7 @@ def test_path_generator_debug():
 
 
 def test_list_directory_files_recursive_nested():
-    from src.safai.directory_handler.handler import DirectoryHandler
+    from safai.directory_handler.handler import DirectoryHandler
 
     dh = DirectoryHandler(SAMPLE_DIR, ignore=[])
     result = dh.list_directory_files(recursive=True)
@@ -173,6 +181,7 @@ def test_list_directory_files_recursive_nested():
             "SystemBackup.iso",
             "LectureRecording.mp3",
             "ProjectPlan.xlsx",
+            "Order_123.docx",
             "SoftwareUpdate.exe",
             "ResearchPaper.pdf",
             "MeetingMinutes.docx",

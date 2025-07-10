@@ -11,7 +11,7 @@ sys.tracebacklimit = 0
 app = typer.Typer(
     name="Safai",
     help="CLI that cleans up folder by intelligently organizing it.",
-    pretty_exceptions_enable=False,
+    pretty_exceptions_enable=True,
 )
 
 
@@ -77,4 +77,4 @@ def main(
 
 
 if __name__ == "__main__":
-    app() 
+    app()
