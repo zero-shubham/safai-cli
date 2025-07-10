@@ -53,7 +53,7 @@ class ProxyAdaper:
             split_content = content.split("---")
             if len(split_content) > 0:
                 content = split_content[0]
-        pp(content)
+        
         return safe_load(StringIO(content))
 
     def get_suggestion(self, files: List[str], user_feeback: str = "") -> dict:
