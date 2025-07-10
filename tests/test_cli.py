@@ -5,6 +5,7 @@ import pytest
 import typer
 from typer.testing import CliRunner
 from main import app
+from yaml import dump
 
 # Paths
 TESTS_DIR = Path(__file__).parent
@@ -44,7 +45,7 @@ def setup_and_teardown_sample_folder():
 
 @pytest.mark.parametrize("platform", ["openai", "claude", "gemini"])
 def test_organize_sample_folder(mocker, platform):
-    mock_ret_val = {
+    mock_ret_val = dump({
         "Documents": [
             "MeetingMinutes.docx",
             "ResearchPaper.pdf",
@@ -57,7 +58,10 @@ def test_organize_sample_folder(mocker, platform):
             "Video": ["ProductDemo.mp4"],
         },
         "SystemFiles": ["SoftwareUpdate.exe", "SystemBackup.iso"],
-    }
+    }, default_flow_style=False, sort_keys=False)
+    # test extra explanation added scenario
+    mock_ret_val = "---\n" + mock_ret_val + "--- \nSome explaination from LLM"
+    
     if platform == "openai":
         mocker.patch("src.model_proxy.openai.Client", autospec=True)
         mocker.patch(

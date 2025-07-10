@@ -6,8 +6,8 @@ from rich.console import Console
 from pydantic import ValidationError
 from pathlib import Path
 from configparser import ConfigParser
-from model_proxy import ProxyCreator
-from directory_handler import DirectoryHandler
+from src.model_proxy import ProxyCreator
+from src.directory_handler import DirectoryHandler
 
 
 class Orchestrator(ABC):

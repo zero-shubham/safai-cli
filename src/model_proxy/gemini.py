@@ -1,10 +1,7 @@
 from google import genai
 from google.genai import types
-from typing import List
 from .shared import (
     _system_prompt,
-    _gen_file_names_prompt_decorator,
-    _parse_suggestions_decorator,
 )
 
 
@@ -14,24 +11,12 @@ class GeminiProxy:
         self.content = []
         self.client = genai.Client(api_key=api_key)
 
-    @_gen_file_names_prompt_decorator
-    def _generate_file_names_prompt(self, prompt: str) -> str:
-        return prompt
-
-    @_parse_suggestions_decorator
-    def _parse_suggested_dir_structure(self, parse_content: dict) -> dict:
-        return parse_content
-
-    def get_suggestion(self, files: List[str], user_feeback: str = "") -> dict:
+    def get_suggestion(self, files_prompt: str, user_feeback: str = "") -> str:
         if len(self.content) == 0:
             self.content.append(
                 types.Content(
                     role="user",
-                    parts=[
-                        types.Part.from_text(
-                            text=self._generate_file_names_prompt(files)
-                        )
-                    ],
+                    parts=[types.Part.from_text(text=files_prompt)],
                 )
             )
         else:
@@ -57,4 +42,4 @@ class GeminiProxy:
             )
         )
 
-        return self._parse_suggested_dir_structure(response.text)
+        return response.text
