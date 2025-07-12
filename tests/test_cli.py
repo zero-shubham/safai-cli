@@ -192,3 +192,36 @@ def test_list_directory_files_recursive_nested():
 
     for _, v in result.items():
         assert v in expected
+
+
+def test_parse_suggested_dir_structure():
+    test_llm_suggestion = """
+    Some extra output
+    ---
+    Documents:
+    - 'Meeting Minutes.docx'
+    - 'ResearchPaper.pdf'
+    - 'ProjectPlan.xlsx'
+    - 'PresentationDraft.pptx'
+    Media:
+    Images:
+        - 'VacationPhoto.jpg'
+        - 'CompanyLogo.png'
+    Audio:
+        - 'LectureRecording.mp3'
+    Video:
+        - 'ProductDemo.mp4'
+    SystemFiles:
+    - 'SoftwareUpdate.exe'
+    - 'SystemBackup.iso'
+    ---
+    Further explaination
+    """
+    
+    from safai.model_proxy.model_proxy import ProxyAdapter
+
+    pr = ProxyAdapter(None)
+    parsed_suggestions = pr._parse_suggested_dir_structure(test_llm_suggestion)
+    
+    assert "Documents" in parsed_suggestions
+    assert "Meeting Minutes.docx" in parsed_suggestions["Documents"]

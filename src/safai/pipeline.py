@@ -28,7 +28,7 @@ class Pipeline:
             for directory, files in dir_files.items():
                 status.console.print(f"Currently processing {directory} \n")
                 if len(files) == 0:
-                    pp(f"Skipping empty folder {directory} :zero:")
+                    pp(f"Skipping empty folder {directory} :zero: \n")
                     continue
                 ai = ProxyCreator.create(self.cfg)
                 suggestion = ai.get_suggestion(files)
@@ -37,7 +37,7 @@ class Pipeline:
                 while not self.cfg.one_shot:
                     status.stop()
                     feedback = Console(record=True).input(
-                        "Please provide any feedback if required (n to accept / s to skip - current plan): "
+                        "\nPlease provide any feedback if required (n to accept / s to skip - current plan): "
                     )
 
                     if feedback == "n" or feedback == "s":
@@ -49,7 +49,7 @@ class Pipeline:
                 if feedback != "s":
                     dh.restructure_directory(directory, suggestion)
 
-        pp("Happy decluttering! :sparkles:")
+        pp("\nHappy decluttering! :sparkles:")
 
 
 class PipelineCreator:
