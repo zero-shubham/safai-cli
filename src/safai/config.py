@@ -39,7 +39,7 @@ class Config(BaseModel):
         if v == "":
             default = _default_models[values.data["platform"]]
             pp(
-                f"Model value not provided defaulting to [bold blue]{default}[/bold blue]"
+                f"Model value not provided defaulting to [bold blue]{default}[/bold blue]\n"
             )
             return default
         return v

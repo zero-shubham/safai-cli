@@ -119,5 +119,84 @@ model = claude-3-7-sonnet-latest
 - If required options are missing, Safai will prompt you to provide them or add them to your config file.
 - Make sure your API keys are valid and have access to the selected model/platform.
 
+## Sample Usage
+
+```shell
+zero@pop-os ~/Desktop » ls -al             
+total 3464
+drwxr-xr-x  8 zero zero   4096 Jul 12 09:51  .
+drwxr-x--- 45 zero zero   4096 Jul 12 09:51  ..
+drwxrwxr-x  3 zero zero   4096 Jul 10 17:06  Archives
+-rwxrwxr-x  1 zero zero 344077 May  6 19:55  cartoonified_image.jpg
+drwxrwxr-x  2 zero zero   4096 Jul 10 15:28  Configurations
+-rwxrwxr-x  1 zero zero  92200 May  6 19:55  distributed_sys.png
+-rwxrwxr-x  1 zero zero  65154 May  6 19:55  distributed_sys.svg
+drwxrwxr-x  2 zero zero   4096 Jul 10 17:06  Documents
+drwxrwxr-x  5 zero zero   4096 Jul 10 17:08  Domine
+-rwxrwxr-x  1 zero zero    903 May  6 19:55  favicon.png
+-rwxrwxr-x  1 zero zero   2468 May  6 19:55  favicon.svg
+-rwxrwxr-x  1 zero zero    637 May  6 19:55  logo-dark.svg
+-rwxrwxr-x  1 zero zero    637 May  6 19:55  logo-light.svg
+-rwxrwxr-x  1 zero zero 915451 May  6 19:55  me2.jpeg
+-rwxrwxr-x  1 zero zero 836589 May  6 19:55  me3.jpeg
+-rwxrwxr-x  1 zero zero 653372 May  6 19:55  me4.jpeg
+drwxrwxr-x  4 zero zero   4096 Jul 10 17:07  Nunito_Sans
+-rwxrwxr-x  1 zero zero 150540 May  6 19:55  panasonic_ac_invoice.jpeg
+-rwxrwxr-x  1 zero zero     83 May  6 19:55  rounded_favicon.png
+-rwxrwxr-x  1 zero zero 348393 May  6 19:55  vector_cartoon_image.jpg
+-rwxrwxr-x  1 zero zero  67330 May  6 19:55  WhatsApp_Image_2025-01-14_at_11.48.39_AM.jpeg
+
+zero@pop-os ~/Desktop » safai ~/Desktop -pl=openai      
+Model value not provided defaulting to o4-mini
+Currently processing /home/zero/Desktop/ 
+
+⠏ In process...
+Suggested reorganize as follows: 
+ Media:
+  Images:
+    Logos:
+      - 'logo-dark.svg'
+      - 'logo-light.svg'
+    Favicons:
+      - 'favicon.svg'
+      - 'favicon.png'
+      - 'rounded_favicon.png'
+    Illustrations:
+      - 'distributed_sys.svg'
+      - 'distributed_sys.png'
+      - 'cartoonified_image.jpg'
+      - 'vector_cartoon_image.jpg'
+    Photos:
+      Selfies:
+        - 'me2.jpeg'
+        - 'me3.jpeg'
+        - 'me4.jpeg'
+      WhatsApp:
+        - 'WhatsApp_Image_2025-01-14_at_11.48.39_AM.jpeg'
+      Invoices:
+Please provide any feedback if required (n to accept / s to skip - current plan): n
+Happy decluttering! ✨
+
+zero@pop-os ~/Desktop » ls -al                    
+total 36
+drwxr-xr-x  9 zero zero 4096 Jul 12 09:52  .
+drwxr-x--- 45 zero zero 4096 Jul 12 09:53  ..
+drwxrwxr-x  3 zero zero 4096 Jul 10 17:06  Archives
+drwxrwxr-x  2 zero zero 4096 Jul 10 15:28  Configurations
+drwxrwxr-x  2 zero zero 4096 Jul 10 17:06  Documents
+drwxrwxr-x  5 zero zero 4096 Jul 10 17:08  Domine
+drwxrwxr-x  3 zero zero 4096 Jul 12 09:52  Media
+drwxrwxr-x  4 zero zero 4096 Jul 10 17:07  Nunito_Sans
+
+zero@pop-os ~/Desktop » ls -al Media/Images 
+total 24
+drwxrwxr-x 6 zero zero 4096 Jul 12 09:52 .
+drwxrwxr-x 3 zero zero 4096 Jul 12 09:52 ..
+drwxrwxr-x 2 zero zero 4096 Jul 12 09:52 Favicons
+drwxrwxr-x 2 zero zero 4096 Jul 12 09:52 Illustrations
+drwxrwxr-x 2 zero zero 4096 Jul 12 09:52 Logos
+drwxrwxr-x 5 zero zero 4096 Jul 12 09:52 Photos
+```
+
 ## License
 GNU General Public License v3.0
