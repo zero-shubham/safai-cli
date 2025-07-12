@@ -194,7 +194,7 @@ def test_list_directory_files_recursive_nested():
         assert v in expected
 
 
-def test_parse_suggested_dir_structure():
+def test_parse_suggested_dir_structure_success():
     test_llm_suggestion = """
     Some extra output
     ---
@@ -217,11 +217,42 @@ def test_parse_suggested_dir_structure():
     ---
     Further explaination
     """
-    
+
     from safai.model_proxy.model_proxy import ProxyAdapter
 
     pr = ProxyAdapter(None)
     parsed_suggestions = pr._parse_suggested_dir_structure(test_llm_suggestion)
-    
+
     assert "Documents" in parsed_suggestions
     assert "Meeting Minutes.docx" in parsed_suggestions["Documents"]
+
+
+def test_parse_suggested_dir_structure_failure():
+    test_llm_suggestion = """
+    Some extra output
+    ---
+    ---
+    Further explaination
+    """
+
+    from safai.model_proxy.model_proxy import ProxyAdapter
+
+    pr = ProxyAdapter(None)
+    parsed_suggestions = pr._parse_suggested_dir_structure(test_llm_suggestion)
+
+    assert parsed_suggestions == {}
+
+
+def test_parse_suggested_dir_structure_no_suggestion():
+    test_llm_suggestion = """
+    Some extra output
+    Missing suggesstion
+    Further explaination
+    """
+
+    from safai.model_proxy.model_proxy import ProxyAdapter
+
+    pr = ProxyAdapter(None)
+    parsed_suggestions = pr._parse_suggested_dir_structure(test_llm_suggestion)
+
+    assert parsed_suggestions == {}

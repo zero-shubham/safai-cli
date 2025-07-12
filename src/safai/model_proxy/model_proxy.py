@@ -47,10 +47,13 @@ class ProxyAdapter:
     def _parse_suggested_dir_structure(self, content: str) -> dict:
         pp(f"\nSuggested reorganize as follows: \n {content}")
 
-        start = content.index("---")
-        end = content.index("---", start+3)
-        
-        return safe_load(StringIO(content[start+3: end]))
+        if content.count("---") >= 2:
+            start = content.index("---")
+            end = content.index("---", start + 3)
+
+            return safe_load(StringIO(content[start + 3 : end])) or {}
+
+        return {}
 
     def get_suggestion(self, files: List[str], user_feeback: str = "") -> dict:
         return self._parse_suggested_dir_structure(
