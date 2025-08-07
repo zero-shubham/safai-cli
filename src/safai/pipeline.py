@@ -24,13 +24,15 @@ class Pipeline:
         dh = DirectoryHandler(self.cfg.path, self.cfg.ignore)
         dir_files = dh.list_directory_files(recursive=self.cfg.recursive)
 
+        ai = ProxyCreator.create(self.cfg)
+
         with Console().status("[bold green]In process...\n") as status:
             for directory, files in dir_files.items():
                 status.console.print(f"Currently processing {directory} \n")
                 if len(files) == 0:
                     pp(f"Skipping empty folder {directory} :zero: \n")
                     continue
-                ai = ProxyCreator.create(self.cfg)
+
                 suggestion = ai.get_suggestion(files)
 
                 feedback = "n"
