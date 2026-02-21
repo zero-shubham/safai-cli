@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from .config import Config, PlatformEnum
 import typer
+import sys
 from rich import print as pp
 from rich.console import Console
 from pydantic import ValidationError
@@ -8,6 +9,11 @@ from pathlib import Path
 from configparser import ConfigParser
 from .model_proxy import ProxyCreator
 from .directory_handler import DirectoryHandler
+
+try:
+    import platformdirs
+except ImportError:
+    platformdirs = None
 
 
 class Orchestrator(ABC):
@@ -57,16 +63,36 @@ class Pipeline:
 class PipelineCreator:
     @classmethod
     def _load_config_file_(cls, platform: PlatformEnum) -> dict:
-        home = Path.home()
         cfg_parser = ConfigParser()
-        cfg_parser.read(f"{home}/.safai")
         cfg = {}
 
-        cfg.update(cfg_parser["config"])
+        # Determine config file paths to check
+        config_paths = []
+        
+        # For non-Linux systems, check platform-specific config directory first
+        if sys.platform != "linux" and platformdirs is not None:
+            platform_config_dir = Path(platformdirs.user_config_dir("safai"))
+            config_paths.append(platform_config_dir / "config")
+            config_paths.append(platform_config_dir / "config.ini")
+        
+        # Always check ~/.safai as fallback
+        config_paths.append(Path.home() / ".safai")
+        
+        # Try each config path until we find one that exists
+        for config_path in config_paths:
+            if config_path.exists():
+                cfg_parser.read(config_path)
+                break
+
+        # Load config section if it exists
+        if cfg_parser.has_section("config"):
+            cfg.update(cfg_parser["config"])
+        
         if platform == PlatformEnum.np:
             platform = cfg.get("platform")
 
-        if cfg_parser.has_section(platform):
+        # Load platform-specific section if it exists
+        if platform and cfg_parser.has_section(platform):
             cfg.update(cfg_parser[platform])
 
         return cfg

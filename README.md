@@ -53,7 +53,7 @@ make run ARGS="[OPTIONS] PATH"
 | --recursive   | -r    | Recursively organize sub-directories                     | False             |
 | --ignore      | -i    | Directories to ignore (can be used multiple times)       | []                |
 
-> **Note:** Except for `PATH`, all options can be set in `$HOME/.safai` and will be loaded automatically if not provided on the command line.
+> **Note:** Except for `PATH`, all options can be set in a config file and will be loaded automatically if not provided on the command line.
 
 > **Recursive mode (-r/--recursive):**
 > When this flag is set, Safai will traverse all subdirectories of the specified path and organize files in every folder, not just the root. This is useful for deeply nested or complex folder structures.
@@ -80,13 +80,21 @@ python main.py --platform openai --api_key YOUR_OPENAI_KEY --model gpt-3.5-turbo
 
 Or, with a config file (recommended):
 
-## Configuration File: `$HOME/.safai`
+## Configuration File
 
-You can store your default options in a config file in your home directory. This file uses INI format and can have a `[config]` section for global defaults and sections for each platform.
+Safai stores configuration in platform-specific locations:
+
+**Linux**: `~/.safai`  
+**macOS**: `~/Library/Application Support/safai/config`  
+**Windows**: `%APPDATA%\safai\config`
+
+> **Note**: Safai also checks `~/.safai` as a fallback on macOS/Windows for backward compatibility.
+
+The config file uses INI format with a `[config]` section for global defaults and sections for each platform.
 
 > **Note:** Only `platform` and `ignore` can be set in the `[config]` section. `api_key` and `model` must be set in the platform-specific sections (`[openai]`, `[gemini]`, `[claude]`). `one_shot` and `recursive` must be provided via CLI options if needed.
 
-### Example `$HOME/.safai`:
+### Example Config File:
 
 ```ini
 [config]
