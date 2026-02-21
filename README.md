@@ -1,5 +1,8 @@
 # Safai CLI
 
+[![PyPI version](https://badge.fury.io/py/safai.svg)](https://badge.fury.io/py/safai)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+
 Safai is a command-line tool that intelligently organizes your folders using AI. It supports multiple AI platforms and can be customized to your needs.
 
 ## Features
@@ -12,19 +15,67 @@ Safai is a command-line tool that intelligently organizes your folders using AI.
 
 ## Installation
 
-Safai is distributed as a Python package. You can install it using pip:
+### 🚀 Quick Install (Recommended)
+
+Install using **uv** (recommended for speed and reliability):
+
+```bash
+uv add safai
+```
+
+Or using **pip**:
 
 ```bash
 pip install safai
 ```
 
-If you are developing locally, you can install it in editable mode from the repo root:
+### 🔧 Development Install
+
+If you're developing locally or want to contribute:
 
 ```bash
+# Clone the repository
+git clone https://github.com/shubham-biswas/safai-cli.git
+cd safai-cli
+
+# Install in editable mode with uv
+uv pip install -e .
+
+# Or with pip
 pip install -e .
 ```
 
-> **Tip:** It's recommended to use a virtual environment for isolation.
+### 📦 Alternative Installation Methods
+
+#### Using pipx (isolated environment):
+```bash
+pipx install safai
+```
+
+#### Using conda/mamba:
+```bash
+conda install -c conda-forge safai
+```
+
+> **💡 Tip**: It's recommended to use a virtual environment or uv for better dependency management and isolation.
+
+### 🐍 Python Version Requirements
+
+- **Minimum**: Python 3.10
+- **Recommended**: Python 3.11+
+- **Tested**: Up to Python 3.13
+
+### 📋 Dependencies
+
+Safai automatically installs its core dependencies:
+- `anthropic` - For Claude AI platform
+- `google-genai` - For Gemini AI platform  
+- `openai` - For OpenAI platform
+- `platformdirs` - Cross-platform config directories
+- `pydantic` - Data validation
+- `pyyaml` - YAML parsing
+- `rich` - Beautiful terminal output
+- `typer` - CLI framework
 
 ## Usage
 
