@@ -5,6 +5,7 @@ from safai.pipeline import PipelineCreator
 from pathlib import Path
 from typing import List
 import sys
+from importlib.metadata import version
 
 sys.tracebacklimit = 0
 
@@ -12,11 +13,28 @@ app = typer.Typer(
     name="Safai",
     help="CLI that cleans up folder by intelligently organizing it.",
     pretty_exceptions_enable=True,
+    add_completion=False,
 )
 
 
+@app.callback()
+def main_callback(
+    version_flag: Annotated[
+        bool, typer.Option("--version", "-v", help="Show version and exit")
+    ] = False,
+):
+    """Safai CLI - Intelligent folder organizer using AI."""
+    if version_flag:
+        try:
+            pkg_version = version("safai")
+        except Exception:
+            pkg_version = "0.4.6"
+        typer.echo(f"Safai CLI version: {pkg_version}")
+        raise typer.Exit()
+
+
 @app.command()
-def main(
+def organize(
     path: Path,
     platform: Annotated[
         PlatformEnum, typer.Option("--platform", "-pl", help="AI platform to use")
