@@ -15,7 +15,7 @@ class PlatformEnum(str, Enum):
 _default_models = {
     PlatformEnum.gemini: "gemini-2.5-flash",
     PlatformEnum.openai: "o4-mini",
-    PlatformEnum.claude: "claude-3-7-sonnet-latest",
+    PlatformEnum.claude: "claude-3-5-sonnet-20241022",
 }
 
 

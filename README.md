@@ -119,7 +119,7 @@ make run ARGS="[OPTIONS] PATH"
 |----------|---------------------------|
 | openai   | o4-mini                   |
 | gemini   | gemini-2.5-flash          |
-| claude   | claude-3-7-sonnet-latest  |
+| claude   | claude-3-5-sonnet-20241022  |
 
 If you do not specify a model for a platform, Safai will use the default model listed above.
 
@@ -162,7 +162,7 @@ model = gemini-2.5-flash
 
 [claude]
 api_key = your-claude-key
-model = claude-3-7-sonnet-latest
+model = claude-3-5-sonnet-20241022
 ```
 
 - Values in `[config]` are used as defaults for platform and ignore.
