@@ -118,7 +118,7 @@ make run ARGS="[OPTIONS] PATH"
 | Platform | Default Model              |
 |----------|---------------------------|
 | openai   | o4-mini                   |
-| gemini   | gemini-1.5-flash          |
+| gemini   | gemini-2.5-flash          |
 | claude   | claude-3-7-sonnet-latest  |
 
 If you do not specify a model for a platform, Safai will use the default model listed above.
@@ -158,7 +158,7 @@ model = gpt-3.5-turbo
 
 [gemini]
 api_key = your-gemini-key
-model = gemini-1.5-flash
+model = gemini-2.5-flash
 
 [claude]
 api_key = your-claude-key
