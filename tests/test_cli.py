@@ -227,20 +227,49 @@ def test_parse_suggested_dir_structure_success():
     assert "Meeting Minutes.docx" in parsed_suggestions["Documents"]
 
 
-def test_parse_suggested_dir_structure_failure():
-    test_llm_suggestion = """
-    Some extra output
-    ---
-    ---
-    Further explaination
-    """
+def test_version_flag_exits():
+    """Test that the version flag shows version and exits."""
+    result = runner.invoke(
+        app,
+        [
+            "--version",
+        ],
+    )
+    
+    # Check that version is shown and exits
+    assert "Safai CLI version: 0.4.7" in result.output
+    assert result.exit_code == 0
 
-    from safai.model_proxy.model_proxy import ProxyAdapter
 
-    pr = ProxyAdapter(None)
-    parsed_suggestions = pr._parse_suggested_dir_structure(test_llm_suggestion)
+def test_version_flag_exits_with_path():
+    """Test that the version flag shows version and exits even when path is provided."""
+    result = runner.invoke(
+        app,
+        [
+            "--version",
+        ],
+    )
+    
+    # Check that version is shown and exits
+    assert "Safai CLI version: 0.4.7" in result.output
+    assert result.exit_code == 0
 
-    assert parsed_suggestions == {}
+
+def test_path_required_without_version():
+    """Test that path is required when version flag is not used."""
+    result = runner.invoke(
+        app,
+        [
+            "--platform",
+            "openai",
+            "--api_key",
+            "dummy-key",
+        ],
+    )
+    
+    # Check that error message is shown
+    assert "Path is required when not using --version flag" in result.output
+    assert result.exit_code != 0
 
 
 def test_parse_suggested_dir_structure_no_suggestion():

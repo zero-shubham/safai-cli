@@ -103,8 +103,9 @@ make run ARGS="[OPTIONS] PATH"
 | --one_shot    | -o    | Organize without any feedback from user                  | False             |
 | --recursive   | -r    | Recursively organize sub-directories                     | False             |
 | --ignore      | -i    | Directories to ignore (can be used multiple times)       | []                |
+| --version     | -v    | Show version and exit                                    |                   |
 
-> **Note:** Except for `PATH`, all options can be set in a config file and will be loaded automatically if not provided on the command line.
+> **Note:** The `PATH` argument is required unless you're using the `--version` flag. All other options can be set in a config file and will be loaded automatically if not provided on the command line.
 
 > **Recursive mode (-r/--recursive):**
 > When this flag is set, Safai will traverse all subdirectories of the specified path and organize files in every folder, not just the root. This is useful for deeply nested or complex folder structures.
@@ -126,7 +127,7 @@ If you do not specify a model for a platform, Safai will use the default model l
 ## Example: Organizing a Folder
 
 ```bash
-python main.py --platform openai --api_key YOUR_OPENAI_KEY --model gpt-3.5-turbo /path/to/your/folder
+python main.py --path /path/to/your/folder --platform openai --api_key YOUR_OPENAI_KEY --model gpt-3.5-turbo
 ```
 
 Or, with a config file (recommended):

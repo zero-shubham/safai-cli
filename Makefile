@@ -20,6 +20,7 @@ run:
 	./.venv/bin/python3 src/safai/main.py $(ARGS)
 
 build:
+	rm -rf dist
 	uv build
 
 clean:
