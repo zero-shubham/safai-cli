@@ -15,49 +15,19 @@ Safai is a command-line tool that intelligently organizes your folders using AI.
 
 ## Installation
 
-### 🚀 Quick Install (Recommended)
-
-Install using **uv** (recommended for speed and reliability):
-
-```bash
-uv add safai
-```
-
-Or using **pip**:
+Safai is distributed as a Python package. You can install it using pip:
 
 ```bash
 pip install safai
 ```
 
-### 🔧 Development Install
-
-If you're developing locally or want to contribute:
+If you are developing locally, you can install it in editable mode from the repo root:
 
 ```bash
-# Clone the repository
-git clone https://github.com/shubham-biswas/safai-cli.git
-cd safai-cli
-
-# Install in editable mode with uv
-uv pip install -e .
-
-# Or with pip
 pip install -e .
 ```
 
-### 📦 Alternative Installation Methods
-
-#### Using pipx (isolated environment):
-```bash
-pipx install safai
-```
-
-#### Using conda/mamba:
-```bash
-conda install -c conda-forge safai
-```
-
-> **💡 Tip**: It's recommended to use a virtual environment or uv for better dependency management and isolation.
+> **Tip:** It's recommended to use a virtual environment for isolation.
 
 ### 🐍 Python Version Requirements
 
